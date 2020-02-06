@@ -4,6 +4,11 @@ variable "aws_region" {
 }
 
 variable "instance_type" {
-  default     = "t2.large"
+  default     = "t2.micro"
   description = "AWS instance type"
+}
+
+variable "ecs_cluster" {
+  description = "ECS cluster name"
+  default = "medici-stage"
 }
