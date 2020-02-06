@@ -1,17 +1,17 @@
-resource "aws_alb" "demo_eu_alb" {
-  name            = "demo-eu-alb"
-  subnets         = ["${aws_subnet.demo-public-1.id}", "${aws_subnet.demo-public-2.id}", "${aws_subnet.demo-public-3.id}"]
+resource "aws_alb" "medici_stage_alb" {
+  name            = "medici-stage-alb"
+  subnets         = ["${aws_subnet.medici-stage-public-1.id}", "${aws_subnet.medici-stage-public-2.id}", "${aws_subnet.medici-stage-public-3.id}"]
   security_groups = ["${aws_security_group.lb_sg.id}"]
   enable_http2    = "true"
   idle_timeout    = 600
 }
 
 output "alb_output" {
-  value = "${aws_alb.demo_eu_alb.dns_name}"
+  value = "${aws_alb.medici_stage_alb.dns_name}"
 }
 
 resource "aws_alb_listener" "front_end" {
-  load_balancer_arn = "${aws_alb.demo_eu_alb.id}"
+  load_balancer_arn = "${aws_alb.medici_stage_alb.id}"
   port              = "80"
   protocol          = "HTTP"
 
@@ -25,8 +25,8 @@ resource "aws_alb_target_group" "nginx" {
   name       = "nginx"
   port       = 80
   protocol   = "HTTP"
-  vpc_id     = "${aws_vpc.demo-tf.id}"
-  depends_on = ["aws_alb.demo_eu_alb"]
+  vpc_id     = "${aws_vpc.medici-tf.id}"
+  depends_on = ["aws_alb.medici_stage_alb"]
 
   stickiness {
     type            = "lb_cookie"
